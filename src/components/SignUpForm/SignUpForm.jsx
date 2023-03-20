@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { createAccountWithEmailAndPassword, createDocumentFromAuth } from '../../utils/firebase/firebase';
+import { createAuthWithEmailAndPassword, createDocumentFromAuth } from '../../utils/firebase/firebase';
 import './sign-up-form.styles.scss'
 import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
@@ -26,7 +26,7 @@ function SignUpForm() {
             return;
         }
         try {
-            const { user } = await createAccountWithEmailAndPassword(email, password);
+            const { user } = await createAuthWithEmailAndPassword(email, password);
             await createDocumentFromAuth(user, { displayName })
             resetFormField()
         } catch (error) {
@@ -49,7 +49,7 @@ function SignUpForm() {
 
 
                 <FormInput label="Confirm Password" type="password" name='confirmPassword' required value={confirmPassword} onChange={handleOnChange} />
-                <Button children="Sign In" type="submit" />
+                <Button children="Sign Up" type="submit" />
             </form>
 
         </div>
