@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, signInWithRedirect, GoogleAuthProvider } from 'firebase/auth'
+import { getAuth, signInWithPopup, signInWithRedirect, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth'
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
 const firebaseConfig = {
     apiKey: "AIzaSyBWQCOz0xmO5Vvv_HPJz0nOHLtsuT0PAD4",
@@ -11,17 +11,18 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
     prompt: 'select_account'
 })
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider)
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
 export const db = getFirestore();
-export const createDocumentFromAuth = async (userAuth) => {
+export const createDocumentFromAuth = async (userAuth, additionInfomation = {}) => {
+    if (!userAuth) return
     const userDocRef = doc(db, 'users', userAuth.uid);
     console.log(userDocRef);
-
     const userSnapshot = await getDoc(userDocRef);
     if (!userSnapshot.exists()) {
         const { displayName, email } = userAuth;
@@ -30,11 +31,17 @@ export const createDocumentFromAuth = async (userAuth) => {
             await setDoc(userDocRef, {
                 displayName,
                 email,
-                createAt
+                createAt,
+                ...additionInfomation
             })
         } catch (err) {
             console.log('error: ', err.message)
         }
     }
     return userDocRef;
+}
+export const createAccountWithEmailAndPassword = async (email, password) => {
+    if (!email || !password) return;
+
+    return await createUserWithEmailAndPassword(auth, email, password)
 }
