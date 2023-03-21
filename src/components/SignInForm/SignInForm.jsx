@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { createDocumentFromAuth, signInAuthWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase';
+import { signInAuthWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase';
 import Button from '../Button/Button';
 import FormInput from '../FormInput/FormInput'
 
 import './sign-in-form.styles.scss'
+
 function SignInForm() {
     const defaultFormField = {
         email: '',
         password: '',
     }
+
     const [formField, setFormField] = useState(defaultFormField);
     const { email, password } = formField
     const handleOnChange = (event) => {
@@ -21,9 +23,8 @@ function SignInForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const { user } = await signInAuthWithEmailAndPassword(email, password)
-            console.log(user);
-            resetFormField(defaultFormField)
+            await signInAuthWithEmailAndPassword(email, password)
+            resetFormField()
         } catch (err) {
             switch (err.code) {
                 case "auth/user-not-found":
@@ -39,8 +40,7 @@ function SignInForm() {
         }
     }
     const signInWithPopup = async () => {
-        const { user } = await signInWithGooglePopup();
-        createDocumentFromAuth(user)
+        await signInWithGooglePopup();
     }
 
     return (
