@@ -3,7 +3,6 @@ import CategoriesPreview from '../CategoriesPreview/CategoriesPreview';
 import CategoryPage from '../CategoryPage/CategoryPage';
 
 
-import './shop.styles.scss'
 
 function Shop() {
     return (

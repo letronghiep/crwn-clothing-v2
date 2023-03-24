@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { createAuthWithEmailAndPassword, createDocumentFromAuth } from '../../utils/firebase/firebase';
-import './sign-up-form.styles.scss'
+import {SignUpContainer} from './sign-up-form.styles'
 import FormInput from '../FormInput/FormInput';
 import Button from '../Button/Button';
 function SignUpForm() {
@@ -35,7 +35,7 @@ function SignUpForm() {
 
     }
     return (
-        <div className='sign-up-container'>
+        <SignUpContainer>
             <h2>Don't have an account?</h2>
             <span>Sign up with your email password</span>
             <form onSubmit={handleSubmit}>
@@ -52,7 +52,7 @@ function SignUpForm() {
                 <Button children="Sign Up" type="submit" />
             </form>
 
-        </div>
+        </SignUpContainer>
     )
 }
 
