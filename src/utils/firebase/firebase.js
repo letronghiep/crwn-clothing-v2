@@ -19,7 +19,7 @@ export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
 export const db = getFirestore();
-export const createDocumentFromAuth = async (userAuth, additionInfomation = {}) => {
+export const createDocumentFromAuth = async (userAuth, additionInformation = {}) => {
     if (!userAuth) return
     const userDocRef = doc(db, 'users', userAuth.uid);
     // console.log(userDocRef);
@@ -32,7 +32,7 @@ export const createDocumentFromAuth = async (userAuth, additionInfomation = {}) 
                 displayName,
                 email,
                 createAt,
-                ...additionInfomation
+                ...additionInformation
             })
         } catch (err) {
             console.log('error: ', err.message)
@@ -59,12 +59,8 @@ export const getCategoriesAndDocuments = async () => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
     const querySnapshot = await getDocs(q);
-    const categoryMap = querySnapshot.docs.reduce((acc, docRef) => {
-        const { title, items } = docRef.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    }, {})
-    return categoryMap
+    return querySnapshot.docs.map(doc => doc.data())
+
 }
 
 export const createAuthWithEmailAndPassword = async (email, password) => {
