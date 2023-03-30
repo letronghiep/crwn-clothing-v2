@@ -38,7 +38,7 @@ export const createDocumentFromAuth = async (userAuth, additionInformation = {})
             console.log('error: ', err.message)
         }
     }
-    return userDocRef;
+    return userSnapshot;
 }
 
 export const addCollectionAndDocuments = async (
@@ -79,3 +79,14 @@ export const SignOutUser = async () => {
 }
 
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(auth, (userAuth) => {
+            unsubscribe();
+            resolve(userAuth);
+        },
+            reject
+        )
+    })
+}
